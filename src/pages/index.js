@@ -2,13 +2,14 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import DisplayImage from '@/Components/DisplayImage'
 import ColorThief from 'colorthief'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const gallery = <i className='fas fa-images'></i>
 
 export default function Home() {
   const [uploadedImage, setUploadedImage] = useState(null)
   const [colorPalette, setColorPalette] = useState(null)
+  const headerRef = useRef(null)
 
   const uploadImage = (e) => {
     const file = e.target.files[0]
@@ -29,20 +30,27 @@ export default function Home() {
     reader.readAsDataURL(file)
   }
 
+  const handleHeaderClick = () => {
+    if (uploadedImage !== null || colorPalette !== null) {
+      setUploadedImage(null)
+      setColorPalette(null)
+    }
+  }
+
   return (
     <>
       <Head>
         <title>ColorSensei</title>
         <meta
           name='description'
-          content='Find all which color combination suits your image!'
+          content='Find all color combination that suits your image!'
         />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.svg' />
       </Head>
 
       <header>
-        <h1>
+        <h1 ref={headerRef} onClick={handleHeaderClick}>
           <img className='logoImage' src={'/logo.png'} alt='logo' />
           ColorSensei
         </h1>
